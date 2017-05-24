@@ -12,7 +12,9 @@ type Room struct {
 }
 
 func (room *Room) IssueReport(actions chan DirectedPosition) {
-	action := <-actions
-	fmt.Printf("At {%v,%v} Heading %c\n", action.X, action.Y, action.Dir)
-	time.Sleep(time.Duration(rand.Intn(1e3)) * time.Millisecond)
+	for action, isOpened := <-actions; isOpened; action, isOpened = <-actions {
+		fmt.Printf("At {%v,%v} Heading %c\n", action.X, action.Y, action.Dir)
+		time.Sleep(time.Duration(rand.Intn(1e3)) * time.Millisecond)
+	}
+
 }

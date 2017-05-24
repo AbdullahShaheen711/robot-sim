@@ -1,16 +1,17 @@
 package sim
 
 import (
-	//"fmt"
-	"math/rand"
-	"time"
+	"fmt"
 )
 
 type Controller struct {
 	Commands []rune
 }
 
-func (controller *Controller) Command(cmdChan chan rune, cmd rune) {
-	cmdChan <- cmd
-	time.Sleep(time.Duration(rand.Intn(1e3)) * time.Millisecond)
+func (controller *Controller) Command(cmdChan chan rune) {
+	for _, cmd := range controller.Commands {
+		cmdChan <- cmd
+	}
+	close(cmdChan)
+	fmt.Println("Commands channel closes")
 }

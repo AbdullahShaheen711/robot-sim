@@ -2,9 +2,7 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 	"sim"
-	"time"
 )
 
 func main() {
@@ -19,11 +17,8 @@ func main() {
 	// room is 5 X 6
 	var room *sim.Room = &sim.Room{5, 6}
 	// main target
-	for _, cmd := range controller.Commands {
-		go controller.Command(cmdChan, cmd)
-		go robot.Move(room, cmdChan, actChan)
-		go room.IssueReport(actChan)
-		time.Sleep(time.Duration(rand.Intn(1e3)) * time.Millisecond)
-	}
+	go controller.Command(cmdChan)
+	go robot.Move(room, cmdChan, actChan)
+	room.IssueReport(actChan)
 	fmt.Println("Main is over!")
 }
